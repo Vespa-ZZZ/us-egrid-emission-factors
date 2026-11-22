@@ -1,0 +1,16 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "EPA eGRID emission factors",
+    "properties": {
+        "overview": {
+            "type": "string",
+            "title": "Emission factors (table view)",
+            "template": "{{links.apiDefaultDatasetUrl}}/items?view=overview"
+        },
+        "results": {
+            "type": "string",
+            "title": "All results (JSON)",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}

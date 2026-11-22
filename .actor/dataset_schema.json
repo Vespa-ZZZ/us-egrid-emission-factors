@@ -1,0 +1,51 @@
+{
+    "actorSpecification": 1,
+    "fields": {
+        "type": "object",
+        "required": ["level", "areaCode", "areaName", "dataYear", "pollutant", "rateType", "value", "unit",
+            "valueKgPerMWh", "kgUnit", "field", "fileName", "revision", "source", "sourceUrl"],
+        "properties": {
+            "level": { "type": "string", "enum": ["subregion", "state", "us", "nerc"] },
+            "areaCode": { "type": "string", "description": "Area code at the selected geographic level." },
+            "areaName": { "type": "string", "description": "Name of the selected area." },
+            "dataYear": { "type": "integer", "description": "Calendar year of the underlying data." },
+            "pollutant": { "type": "string", "enum": ["CO2", "CH4", "N2O", "CO2e", "NOx", "SO2"] },
+            "rateType": { "type": "string", "enum": ["total output", "non-baseload", "combustion"] },
+            "value": { "type": ["number", "null"], "description": "EPA emission rate in lb/MWh. Null means unpublished." },
+            "unit": { "type": "string", "enum": ["lb/MWh"] },
+            "valueKgPerMWh": { "type": ["number", "null"], "description": "Converted emission rate in kg/MWh." },
+            "kgUnit": { "type": "string", "enum": ["kg/MWh"] },
+            "field": { "type": ["string", "null"], "description": "EPA workbook field code, or null if the field was unpublished." },
+            "fileName": { "type": "string", "description": "EPA workbook filename." },
+            "revision": { "type": ["integer", "null"], "description": "Revision from the workbook filename, when present." },
+            "source": { "type": "string", "description": "EPA eGRID attribution with data year." },
+            "sourceUrl": { "type": "string", "format": "uri", "description": "Direct URL to the source workbook." }
+        }
+    },
+    "views": {
+        "overview": {
+            "title": "Emission factors",
+            "transformation": {
+                "fields": ["dataYear", "level", "areaCode", "areaName", "pollutant", "rateType", "value",
+                    "valueKgPerMWh", "field", "fileName", "revision", "sourceUrl"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "dataYear": { "label": "Data year", "format": "number" },
+                    "level": { "label": "Level", "format": "text" },
+                    "areaCode": { "label": "Area code", "format": "text" },
+                    "areaName": { "label": "Area", "format": "text" },
+                    "pollutant": { "label": "Pollutant", "format": "text" },
+                    "rateType": { "label": "Rate type", "format": "text" },
+                    "value": { "label": "lb/MWh", "format": "number" },
+                    "valueKgPerMWh": { "label": "kg/MWh", "format": "number" },
+                    "field": { "label": "EPA field", "format": "text" },
+                    "fileName": { "label": "Workbook", "format": "text" },
+                    "revision": { "label": "Revision", "format": "number" },
+                    "sourceUrl": { "label": "EPA workbook link", "format": "link" }
+                }
+            }
+        }
+    }
+}

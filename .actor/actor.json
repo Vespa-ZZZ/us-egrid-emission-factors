@@ -1,0 +1,14 @@
+{
+    "actorSpecification": 1,
+    "name": "us-egrid-emission-factors",
+    "title": "US eGRID Electricity Emission Factors",
+    "description": "Retrieve annual EPA eGRID electricity emission rates by eGRID subregion, state, NERC region or the United States.",
+    "version": "1.0",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
+}

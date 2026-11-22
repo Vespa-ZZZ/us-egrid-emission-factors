@@ -1,0 +1,58 @@
+{
+    "title": "EPA eGRID emission factors",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "level": {
+            "title": "Geographic level",
+            "description": "Choose EPA's eGRID subregions, state totals, the national total, or NERC regions.",
+            "type": "string",
+            "editor": "select",
+            "enum": ["subregion", "state", "us", "nerc"],
+            "enumTitles": ["eGRID subregions", "States and territories", "United States", "NERC regions"],
+            "default": "subregion"
+        },
+        "subregions": {
+            "title": "eGRID subregion codes",
+            "description": "Filter subregion results by four-letter EPA codes such as CAMX, NYCW or ERCT. Leave empty for all published subregions.",
+            "type": "array",
+            "editor": "stringList",
+            "items": { "type": "string" },
+            "prefill": ["CAMX", "NYCW"]
+        },
+        "states": {
+            "title": "State codes",
+            "description": "Filter state results by two-letter postal codes such as CA, NY or PR. Leave empty for all states and territories published in each selected year.",
+            "type": "array",
+            "editor": "stringList",
+            "items": { "type": "string" }
+        },
+        "dataYears": {
+            "title": "Data years",
+            "description": "Enter a JSON array of integer data years, for example [2023, 2022]. Leave empty to discover EPA's latest data year.",
+            "type": "array",
+            "editor": "json",
+            "items": { "type": "integer", "minimum": 1900, "maximum": 9999 }
+        },
+        "pollutants": {
+            "title": "Pollutants",
+            "description": "Select one or more pollutants. Empty uses CO2, CH4, N2O, and CO2e. NOx rates are annual.",
+            "type": "array",
+            "editor": "select",
+            "items": {
+                "type": "string",
+                "enum": ["CO2", "CH4", "N2O", "CO2e", "NOx", "SO2"]
+            },
+            "default": ["CO2", "CH4", "N2O", "CO2e"]
+        },
+        "rateType": {
+            "title": "Rate type",
+            "description": "Select the EPA annual total output, non-baseload output, or combustion output rate. All are electricity output rates in lb/MWh.",
+            "type": "string",
+            "editor": "select",
+            "enum": ["total output", "non-baseload", "combustion"],
+            "enumTitles": ["Total output", "Non-baseload output", "Combustion output"],
+            "default": "total output"
+        }
+    }
+}
