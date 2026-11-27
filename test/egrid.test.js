@@ -161,3 +161,26 @@ test('stops on access denial and limits retries on server errors', async () => {
     await assert.rejects(runActor({}, temporary.dependencies), /HTTP 503/);
     assert.deepEqual(temporary.events, [DETAILED_DATA, 2350, DETAILED_DATA, 4700, DETAILED_DATA, 9400, DETAILED_DATA]);
 });
+
+test('prechecks the dataset item budget and allows non-PPE output', async () => {
+    for (const [isPayPerEvent, budget] of [[true, 1], [true, 0], [false, 0]]) {
+        const configureActor = (actor, records) => {
+            actor.getChargingManager = () => ({
+                getPricingInfo: () => ({ isPayPerEvent }),
+                calculateMaxEventChargeCountWithinLimit(event) {
+                    assert.equal(event, 'apify-default-dataset-item');
+                    return budget - records.length;
+                },
+            });
+        };
+        const { dependencies, output } = mockRun();
+        let summary;
+        dependencies.actor.setValue = async (_, value) => { summary = value; };
+        configureActor(dependencies.actor, output);
+        const expected = isPayPerEvent ? budget : 8;
+        const count = await runActor({ level: 'subregion', subregions: ['CAMX', 'NYCW'] }, dependencies);
+        assert.equal(count, expected);
+        assert.equal(output.length, expected);
+        assert.equal(summary?.stopReason, isPayPerEvent ? 'spendingLimit' : undefined);
+    }
+});

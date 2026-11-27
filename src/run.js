@@ -1,3 +1,4 @@
+import { pushDataWithinLimit } from './charging.js';
 import {
     DETAILED_DATA, HISTORICAL_DATA, discoverWorkbooks, normalizeInput, parseWorkbook, sanitize,
 } from './egrid.js';
@@ -106,9 +107,10 @@ export async function runActor(rawInput, {
         records.push(...workbooks.get(book.sourceUrl));
     }
 
-    const result = await actor.pushData(records);
+    const result = await pushDataWithinLimit(actor, records);
     if (result?.eventChargeLimitReached) {
         warn('Pay-per-event charge limit reached during dataset output.');
+        await actor.setValue?.('RUN_SUMMARY', { pushed: result.chargedCount, stopReason: 'spendingLimit' });
         return result.chargedCount;
     }
     return records.length;
